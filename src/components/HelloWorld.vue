@@ -1,5 +1,6 @@
 <template>
   <div class="bgcolor">
+    <div>
     <div class="d-flex flex-row-reverse bd-highlight mr-5 pt-3">
     <p class="text-white">{{fullDate}}</p>
     </div>
@@ -8,6 +9,7 @@
         <div class="clock border border-primary">{{minutes}}:{{seconds}}</div>
       </div>
       <div class="h1 text-white border border-primary">休息是為了走更遠的路</div>
+    </div>
     </div>
   </div>
 </template>
@@ -43,6 +45,12 @@ export default {
       ${hour}:${min < 10 ? '0' : ''}${min}`;
       return str;
     },
+  },
+  created() {
+    const vm = this;
+    setInterval(() => {
+      vm.date = new Date();
+    }, 1000);
   },
 };
 </script>
