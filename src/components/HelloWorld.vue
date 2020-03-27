@@ -1,15 +1,41 @@
 <template>
-  <div class="bgcolor">
+  <div>
     <div>
-    <div class="d-flex flex-row-reverse bd-highlight mr-5 pt-3">
-    <p class="text-white">{{fullDate}}</p>
+      <!-- 顯示目前日期與時間 -->
+    <div class="d-flex flex-row-reverse bd-highlight pr-5 pt-3">
+    <p class="text-white font-weight-bold">{{fullDate}}</p>
     </div>
-    <div class="header row justify-content-around">
+    <!-- 倒數計時器與任務標語 -->
+    <div class="row justify-content-around">
+      <!-- 倒數計時器 -->
       <div>
-        <div class="clock border border-primary">{{minutes}}:{{seconds}}</div>
+        <div class="clock font-weight-bold">
+          {{minutes}}:{{seconds}}
+          </div>
+          <!-- 控制器 -->
+        <div class="d-flex justify-content-center">
+          <!-- 聲音 -->
+          <div class="mr-4 p-4 bg-orging svg--border">
+          <img src="../assets/img/icon-bell.svg" alt="" srcset="">
+          </div>
+          <!-- 播放或停止-->
+          <div class="mr-4 p-4 bg-light svg--border" @click="play">
+          <img src="../assets/img/icon-play--orange.svg" alt="" srcset="">
+          </div>
+          <!-- 重置-->
+          <div class="mr-4 p-4 svg--border">
+          <img src="../assets/img/icon-delete.svg" alt="" srcset="">
+          </div>
+        </div>
       </div>
-      <div class="h1 text-white border border-primary">休息是為了走更遠的路</div>
+      <!-- 任務標語 -->
+      <div class="h2 text-white font-weight-bold pt-5">休息是為了走更遠的路</div>
     </div>
+    <!-- 固定下方的番茄圖 -->
+    <div class="fixbottom d-flex justify-content-center">
+      <img src="../assets/img/tomato--green.svg" alt="" srcset="">
+    </div>
+    <audio src="../assets/music/01.mp3" type="audio/mpeg" loop="loop"></audio>
     </div>
   </div>
 </template>
@@ -32,6 +58,9 @@ export default {
   methods: {
     openModal() {
       $('#exampleModal').modal('show');
+    },
+    play() {
+      console.log('play');
     },
   },
   computed: {
