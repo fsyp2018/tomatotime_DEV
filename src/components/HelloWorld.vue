@@ -35,7 +35,7 @@
     <div class="fixbottom d-flex justify-content-center">
       <img src="../assets/img/tomato--green.svg" alt="" srcset="">
     </div>
-    <audio src="../assets/music/01.mp3" type="audio/mpeg" loop="loop"></audio>
+    <audio ref="audio" src="../assets/music/01.mp3" type="audio/mpeg" loop="loop"></audio>
     </div>
   </div>
 </template>
@@ -60,6 +60,7 @@ export default {
       $('#exampleModal').modal('show');
     },
     play() {
+      this.$refs.audio.play();
       console.log('play');
     },
   },
