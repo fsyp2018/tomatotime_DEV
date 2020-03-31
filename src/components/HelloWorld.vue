@@ -1,6 +1,9 @@
 <template>
   <div>
     <div>
+    <nav class="navbar navbar-light">
+      <a class="navbar-brand" href="#">Navbar</a>
+    </nav>
       <!-- 顯示目前日期與時間 -->
     <div class="d-flex flex-row-reverse bd-highlight pr-5 pt-3">
     <p class="text-white font-weight-bold">{{fullDate}}</p>
@@ -33,8 +36,10 @@
         </div>
       </div>
       <!-- 任務標語 -->
+      <div>
       <div v-if="isStart" class="h2 text-white font-weight-bold pt-5">GOGO~~~奮鬥下去!!</div>
       <div v-else class="h2 text-white font-weight-bold pt-5">休息是為了走更遠的路</div>
+      </div>
     </div>
     <!-- 固定下方的番茄圖 -->
     <div class="fixbottom d-flex justify-content-center">
