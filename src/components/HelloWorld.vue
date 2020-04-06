@@ -2,8 +2,11 @@
   <div>
     <div>
     <nav class="navbar navbar-light">
-      <a class="navbar-brand" href="#">Navbar</a>
+      <img class="svg--border" src="../assets/img/icon-edit.svg" alt="" srcset="">
     </nav>
+    <div id="exampleModal">
+      <h1>測試</h1>
+    </div>
       <!-- 顯示目前日期與時間 -->
     <div class="d-flex flex-row-reverse bd-highlight pr-5 pt-3">
     <p class="text-white font-weight-bold">{{fullDate}}</p>
