@@ -1,14 +1,36 @@
 <template>
   <div>
     <div>
+      <!-- menu顯示按鈕 -->
     <nav class="navbar navbar-light">
-      <img class="svg--border" src="../assets/img/icon-edit.svg" alt="" srcset="">
+      <img class="svg--border" src="../assets/img/icon-edit.svg" alt="" srcset="" @click="menushow">
     </nav>
-    <div class="side-menu">
-      <nav>
-        <a href="#">設定任務</a>
-        <a href="#">設定倒數時間</a>
-      </nav>
+    <!-- menu -->
+    <div class="side-menu" :class="{menushow:sidemenushow}">
+      <ul class="nav">
+        <li>
+        <span>新增待辦事項</span>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="請輸入待辦事項">
+          <div class="input-group-prepend">
+            <button class="btn btngreen" type="button">
+              新增
+              </button>
+          </div>
+        </div>
+        </li>
+        <li>
+        <span>設定倒數時間</span>
+        <div class="input-group mb-3">
+          <input type="number" class="form-control" placeholder="請輸入倒數時間" min="1">
+          <div class="input-group-prepend">
+            <button class="btn btngreen" type="button">
+              設定
+              </button>
+          </div>
+        </div>
+        </li>
+      </ul>
     </div>
       <!-- 顯示目前日期與時間 -->
     <div class="d-flex flex-row-reverse bd-highlight pr-5 pt-3">
@@ -26,7 +48,7 @@
           <!-- 聲音 -->
           <div class="mr-4 p-4 svg--border"
           v-if="$refs.audio"
-          :class="{'bg-orging':!$refs.audio.muted}"
+          :class="{'bg-orange':!$refs.audio.muted}"
           @click="$refs.audio.muted = !$refs.audio.muted">
           <img src="../assets/img/icon-bell.svg" alt="" srcset="">
           </div>
@@ -45,6 +67,7 @@
       <div>
       <div v-if="isStart" class="h2 text-white font-weight-bold pt-5">GOGO~~~奮鬥下去!!</div>
       <div v-else class="h2 text-white font-weight-bold pt-5">休息是為了走更遠的路</div>
+      <div class="h2 text-white font-weight-bold pt-5">待辦事項有很多</div>
       </div>
     </div>
     <!-- 固定下方的番茄圖 -->
@@ -70,6 +93,7 @@ export default {
       seconds: '00', // 字幕顯示(秒)
       date: new Date(),
       interval: '',
+      sidemenushow: false,
     };
   },
   methods: {
@@ -121,6 +145,10 @@ export default {
       } else {
         vm.clear();
       }
+    },
+    menushow() {
+      const vm = this;
+      vm.sidemenushow = !vm.sidemenushow;
     },
   },
   computed: {
