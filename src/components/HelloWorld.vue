@@ -4,8 +4,11 @@
     <nav class="navbar navbar-light">
       <img class="svg--border" src="../assets/img/icon-edit.svg" alt="" srcset="">
     </nav>
-    <div id="exampleModal">
-      <h1>測試</h1>
+    <div class="side-menu">
+      <nav>
+        <a href="#">設定任務</a>
+        <a href="#">設定倒數時間</a>
+      </nav>
     </div>
       <!-- 顯示目前日期與時間 -->
     <div class="d-flex flex-row-reverse bd-highlight pr-5 pt-3">
