@@ -67,7 +67,11 @@
       <div>
       <div v-if="isStart" class="h2 text-white font-weight-bold pt-5">GOGO~~~奮鬥下去!!</div>
       <div v-else class="h2 text-white font-weight-bold pt-5">休息是為了走更遠的路</div>
-      <div class="h2 text-white font-weight-bold pt-5">待辦事項有很多</div>
+      <div class="h2 text-white font-weight-bold pt-5">
+        <p>待辦事項1</p>
+        <p>待辦事項2</p>
+        <p>待辦事項3</p>
+        </div>
       </div>
     </div>
     <!-- 固定下方的番茄圖 -->
