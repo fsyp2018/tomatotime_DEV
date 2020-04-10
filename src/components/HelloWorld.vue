@@ -11,9 +11,10 @@
         <li>
         <span>新增待辦事項</span>
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="請輸入待辦事項">
+          <input type="text" class="form-control" placeholder="請輸入待辦事項"
+          v-model="newTodo" @keyup.enter="addTodo">
           <div class="input-group-prepend">
-            <button class="btn btngreen" type="button">
+            <button class="btn btngreen" type="button" @click="addTodo">
               新增
               </button>
           </div>
@@ -67,11 +68,48 @@
       <div>
       <div v-if="isStart" class="h2 text-white font-weight-bold pt-5">GOGO~~~奮鬥下去!!</div>
       <div v-else class="h2 text-white font-weight-bold pt-5">休息是為了走更遠的路</div>
-      <div class="h2 text-white font-weight-bold pt-5">
-        <p>待辦事項1</p>
-        <p>待辦事項2</p>
-        <p>待辦事項3</p>
+
+      <div class="container my-3">
+        <div class="card text-center">
+          <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+              <li class="nav-item">
+                <a class="nav-link active" href="#">全部</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link " href="#">進行中</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">已完成</a>
+              </li>
+            </ul>
+          </div>
+          <ul class="list-group list-group-flush text-left">
+            <li class="list-group-item" v-for="item in todos" :key="item.id">
+              <div class="d-flex">
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="a1"
+                  v-model="item.completed" :key="item.id">
+                  <label class="form-check-label" :for="item.id">
+                   {{ item.title}}
+                  </label>
+                </div>
+                <button type="button" class="close ml-auto" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <input type="text" class="form-control">
+            </li>
+          </ul>
+          <div class="card-footer d-flex justify-content-between">
+            <span>還有 3 筆任務未完成</span>
+            <a href="#">清除所有任務</a>
+          </div>
         </div>
+      </div>
+
       </div>
     </div>
     <!-- 固定下方的番茄圖 -->
@@ -98,6 +136,14 @@ export default {
       date: new Date(),
       interval: '',
       sidemenushow: false,
+      newTodo: '',
+      todos: [
+        {
+          id: '1',
+          title: '你好',
+          completed: false,
+        },
+      ],
     };
   },
   methods: {
@@ -132,14 +178,12 @@ export default {
       const sec = vm.setSecond % 60;
       if (vm.setSecond > 0) {
         vm.setSecond -= 1;
-
         // 分數格式調整
         if (min < 10) {
           vm.minutes = `0${min}`;
         } else {
           vm.minutes = min;
         }
-
         // 秒數格式調整
         if (sec < 10) {
           vm.seconds = `0${sec}`;
@@ -153,6 +197,18 @@ export default {
     menushow() {
       const vm = this;
       vm.sidemenushow = !vm.sidemenushow;
+    },
+    addTodo() {
+      const vm = this;
+      if (!vm.newTodo) {
+        return;
+      }
+      vm.todos.push({
+        id: Math.floor(Date.now()),
+        title: vm.newTodo.trim(),
+        completed: false,
+      });
+      vm.newTodo = '';
     },
   },
   computed: {
