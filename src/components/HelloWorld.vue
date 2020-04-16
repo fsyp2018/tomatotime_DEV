@@ -52,11 +52,10 @@
             <li class="list-group-item" v-for="(item) in filteredTodos" :key="item.id">
               <div class="d-flex">
                 <div class="form-check">
-                  <input type="checkbox" class="form-check-input" id="a1"
-                  v-model="task">
-                  <label class="form-check-label" :for="item.id">
-                   {{ item.title}}
-                  </label>
+                <div class="radio">
+                  <label><input type="radio" v-model="task"
+                   :value="item.title">{{ item.title }}</label>
+                </div>
                 </div>
                 <button type="button" class="close ml-auto" aria-label="Close"
                 @click="removeTodo(item)">
@@ -116,7 +115,7 @@
     </div>
     <audio ref="audio" src="../assets/music/01.mp3" type="audio/mpeg" loop="loop"></audio>
     </div>
-  </div>
+  </template>
 </template>
 
 <script>
@@ -147,7 +146,7 @@ export default {
         },
       ],
       visibility: 'all',
-      task: '1',
+      task: '',
     };
   },
   methods: {
