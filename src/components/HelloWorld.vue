@@ -85,7 +85,7 @@
             </ul>
           </div>
           <ul class="list-group list-group-flush text-left">
-            <li class="list-group-item" v-for="item in todos" :key="item.id">
+            <li class="list-group-item" v-for="(item, key) in todos" :key="item.id">
               <div class="d-flex">
                 <div class="form-check">
                   <input type="checkbox" class="form-check-input" id="a1"
@@ -94,7 +94,8 @@
                    {{ item.title}}
                   </label>
                 </div>
-                <button type="button" class="close ml-auto" aria-label="Close">
+                <button type="button" class="close ml-auto" aria-label="Close"
+                @click="removeTodo(key)">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
@@ -141,6 +142,11 @@ export default {
         {
           id: '1',
           title: '你好',
+          completed: false,
+        },
+        {
+          id: '2',
+          title: '你好1',
           completed: false,
         },
       ],
@@ -209,6 +215,10 @@ export default {
         completed: false,
       });
       vm.newTodo = '';
+    },
+    removeTodo(key) {
+      const vm = this;
+      vm.todos.splice(key, 1);
     },
   },
   computed: {
