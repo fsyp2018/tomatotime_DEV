@@ -32,6 +32,44 @@
         </div>
         </li>
       </ul>
+      <div class="container my-3">
+        <div class="card text-center">
+          <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+              <li class="nav-item">
+                <a class="nav-link"
+                :class="{'active': visibility == 'all'}"
+                @click="visibility = 'all'" href="#">待辦事項</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link"
+                :class="{'active': visibility == 'completed'}"
+                @click="visibility = 'completed'" href="#">已完成</a>
+              </li>
+            </ul>
+          </div>
+          <ul class="list-group list-group-flush text-left">
+            <li class="list-group-item" v-for="(item) in filteredTodos" :key="item.id">
+              <div class="d-flex">
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="a1"
+                  v-model="task">
+                  <label class="form-check-label" :for="item.id">
+                   {{ item.title}}
+                  </label>
+                </div>
+                <button type="button" class="close ml-auto" aria-label="Close"
+                @click="removeTodo(item)">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            </li>
+          </ul>
+          <div class="card-footer">
+            <a href="#">清除所有任務</a>
+          </div>
+        </div>
+      </div>
     </div>
       <!-- 顯示目前日期與時間 -->
     <div class="d-flex flex-row-reverse bd-highlight pr-5 pt-3">
@@ -68,49 +106,7 @@
       <div>
       <div v-if="isStart" class="h2 text-white font-weight-bold pt-5">GOGO~~~奮鬥下去!!</div>
       <div v-else class="h2 text-white font-weight-bold pt-5">休息是為了走更遠的路</div>
-
-      <div class="container my-3">
-        <div class="card text-center">
-          <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs">
-              <li class="nav-item">
-                <a class="nav-link active" href="#">全部</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link " href="#">進行中</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">已完成</a>
-              </li>
-            </ul>
-          </div>
-          <ul class="list-group list-group-flush text-left">
-            <li class="list-group-item" v-for="(item, key) in todos" :key="item.id">
-              <div class="d-flex">
-                <div class="form-check">
-                  <input type="checkbox" class="form-check-input" id="a1"
-                  v-model="item.completed" :key="item.id">
-                  <label class="form-check-label" :for="item.id">
-                   {{ item.title}}
-                  </label>
-                </div>
-                <button type="button" class="close ml-auto" aria-label="Close"
-                @click="removeTodo(key)">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-            </li>
-            <li class="list-group-item">
-              <input type="text" class="form-control">
-            </li>
-          </ul>
-          <div class="card-footer d-flex justify-content-between">
-            <span>還有 3 筆任務未完成</span>
-            <a href="#">清除所有任務</a>
-          </div>
-        </div>
-      </div>
-
+      <div class="h2 text-white font-weight-bold pt-5">{{ task }}</div>
       </div>
     </div>
     <!-- 固定下方的番茄圖 -->
@@ -147,9 +143,11 @@ export default {
         {
           id: '2',
           title: '你好1',
-          completed: false,
+          completed: true,
         },
       ],
+      visibility: 'all',
+      task: '1',
     };
   },
   methods: {
@@ -216,9 +214,10 @@ export default {
       });
       vm.newTodo = '';
     },
-    removeTodo(key) {
+    removeTodo(todo) {
       const vm = this;
-      vm.todos.splice(key, 1);
+      const newIndex = vm.todos.findIndex((item) => todo.id === item.id);
+      vm.todos.splice(newIndex, 1);
     },
   },
   computed: {
@@ -232,6 +231,27 @@ export default {
       const str = `${year}.${month}.${day} ${hour < 10 ? '0' : ''}
       ${hour}:${min < 10 ? '0' : ''}${min}`;
       return str;
+    },
+    filteredTodos() {
+      const vm = this;
+      if (vm.visibility === 'completed') {
+        const newTodos = [];
+        vm.todos.forEach((item) => {
+          if (item.completed) {
+            newTodos.push(item);
+          }
+        });
+        return newTodos;
+      } if (vm.visibility === 'all') {
+        const newTodos = [];
+        vm.todos.forEach((item) => {
+          if (!item.completed) {
+            newTodos.push(item);
+          }
+        });
+        return newTodos;
+      }
+      return [];
     },
   },
   created() {
