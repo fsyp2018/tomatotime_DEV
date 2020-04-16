@@ -115,7 +115,7 @@
     </div>
     <audio ref="audio" src="../assets/music/01.mp3" type="audio/mpeg" loop="loop"></audio>
     </div>
-  </template>
+  </div>
 </template>
 
 <script>
