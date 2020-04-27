@@ -66,7 +66,7 @@
             </li>
           </ul>
           <div class="card-footer">
-            <a href="#">清除所有任務</a>
+            <a href="#" @click="deleteList" v-if="checkcount">清除所有任務</a>
           </div>
         </div>
       </div>
@@ -134,18 +134,7 @@ export default {
       interval: '',
       sidemenushow: false,
       newTodo: '',
-      todos: [
-        {
-          id: '1',
-          title: '你好',
-          completed: false,
-        },
-        {
-          id: '2',
-          title: '你好1',
-          completed: true,
-        },
-      ],
+      todos: [],
       visibility: 'all',
       task: '',
     };
@@ -212,12 +201,26 @@ export default {
         title: vm.newTodo.trim(),
         completed: false,
       });
+      localStorage.setItem('todos', JSON.stringify(vm.todos));
+      vm.gettodos();
       vm.newTodo = '';
     },
     removeTodo(todo) {
       const vm = this;
       const newIndex = vm.todos.findIndex((item) => todo.id === item.id);
       vm.todos.splice(newIndex, 1);
+      localStorage.setItem('todos', JSON.stringify(vm.todos));
+      vm.gettodos();
+    },
+    deleteList() {
+      const vm = this;
+      localStorage.removeItem('todos');
+      vm.todos = [];
+      vm.gettodos();
+    },
+    gettodos() {
+      const vm = this;
+      vm.todos = JSON.parse(localStorage.getItem('todos')) || [];
     },
   },
   computed: {
@@ -253,12 +256,20 @@ export default {
       }
       return [];
     },
+    checkcount() {
+      const vm = this;
+      if (vm.todos.length >= 1) {
+        return true;
+      }
+      return false;
+    },
   },
   created() {
     const vm = this;
     setInterval(() => {
       vm.date = new Date();
     }, 1000);
+    vm.gettodos();
   },
 };
 </script>
