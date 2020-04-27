@@ -53,8 +53,9 @@
               <div class="d-flex">
                 <div class="form-check">
                 <div class="radio">
-                  <label><input type="radio" v-model="task"
+                  <label v-if="visibility === 'all'"><input type="radio" v-model="task"
                    :value="item.title">{{ item.title }}</label>
+                   <label v-else>{{ item.title }}</label>
                 </div>
                 </div>
                 <button type="button" class="close ml-auto" aria-label="Close"
