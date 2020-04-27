@@ -70,7 +70,7 @@ body{
     z-index: -1;
 }
 .side-menu {
-  width: 300px;
+  width: 360px;
   box-sizing: border-box;
   background-color:#f08448;
   display: flex;
@@ -101,6 +101,12 @@ body{
           color: #f08448;
           border-color: #f08448;
         }
+      }
+      p {
+        display: block;
+        padding: 10px;
+        color: #fff;
+        position: relative;
       }
     }  
   }

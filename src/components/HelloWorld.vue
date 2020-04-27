@@ -32,9 +32,14 @@
         <li>
         <span>設定倒數時間</span>
         <div class="input-group mb-3">
-          <input type="number" class="form-control" placeholder="請輸入倒數時間" min="1">
+          <p>分鐘</p>
+          <input type="number" class="form-control"  min="0" max="60"
+          v-model="setminutes">
+          <p>秒數</p>
+          <input type="number" class="form-control"  min="0" max="60"
+          v-model="setseconds">
           <div class="input-group-prepend">
-            <button class="btn btngreen" type="button">
+            <button class="btn btngreen" type="button" @click="setTimeCount">
               設定
               </button>
           </div>
@@ -137,9 +142,11 @@ export default {
   data() {
     return {
       isStart: false,
-      setSecond: 60, // 初始共幾秒,
-      minutes: '01', // 字幕顯示(分)
-      seconds: '00', // 字幕顯示(秒)
+      setSecond: 10, // 初始共幾秒,
+      minutes: '00', // 字幕顯示(分)
+      seconds: '10', // 字幕顯示(秒)
+      setminutes: '0',
+      setseconds: '0',
       date: new Date(),
       interval: '',
       sidemenushow: false,
@@ -150,6 +157,7 @@ export default {
       timerun: false,
       caveat: '',
       clickindex: '',
+      TimeCount: '',
     };
   },
   methods: {
@@ -179,9 +187,9 @@ export default {
       const vm = this;
       vm.$refs.audio.load();
       clearInterval(vm.interval);
-      vm.setSecond = 1500;
-      vm.minutes = '25';
-      vm.seconds = '00';
+      vm.setSecond = vm.TimeCount[0].setSecond;
+      vm.minutes = vm.TimeCount[0].minutes;
+      vm.seconds = vm.TimeCount[0].seconds;
       vm.isStart = false;
       vm.task = '';
       vm.timerun = false;
@@ -206,6 +214,8 @@ export default {
         }
       } else {
         vm.todos[vm.clickindex].completed = true;
+        localStorage.setItem('todos', JSON.stringify(vm.todos));
+        vm.gettodos();
         vm.clear();
       }
     },
@@ -259,6 +269,45 @@ export default {
       const newIndex = vm.todos.findIndex((item) => todo.id === item.id);
       vm.clickindex = newIndex;
     },
+    getTimeCount() {
+      const vm = this;
+      vm.TimeCount = JSON.parse(localStorage.getItem('TimeCount')) || [{
+        setSecond: 1500,
+        minutes: '25',
+        seconds: '00',
+      }];
+      vm.setSecond = vm.TimeCount[0].setSecond;
+      vm.minutes = vm.TimeCount[0].minutes;
+      vm.seconds = vm.TimeCount[0].seconds;
+    },
+    setTimeCount() {
+      const vm = this;
+      if (vm.timerun) {
+        vm.caveat = '請先重置時間，才可以設定到數時間。';
+        vm.opencaveat();
+      } else if ((vm.setminutes === '0' && vm.setseconds === '0') || (vm.setminutes > 60 || vm.setseconds > 60)) {
+        vm.caveat = '請按照時間格式輸入';
+        vm.opencaveat();
+      } else {
+        if (vm.setminutes < 10) {
+          vm.setminutes = `0${vm.setminutes}`;
+        }
+        if (vm.setseconds < 10) {
+          vm.setseconds = `0${vm.setseconds}`;
+        }
+        vm.minutes = vm.setminutes;
+        vm.seconds = vm.setseconds;
+        vm.setSecond = vm.setminutes * 60 + vm.setseconds * 1;
+        vm.TimeCount = [{
+          setSecond: vm.setSecond,
+          minutes: vm.minutes,
+          seconds: vm.seconds,
+        }];
+        localStorage.setItem('TimeCount', JSON.stringify(vm.TimeCount));
+        vm.setminutes = '0';
+        vm.setseconds = '0';
+      }
+    },
   },
   computed: {
     fullDate() {
@@ -307,6 +356,7 @@ export default {
       vm.date = new Date();
     }, 1000);
     vm.gettodos();
+    vm.getTimeCount();
   },
 };
 </script>
