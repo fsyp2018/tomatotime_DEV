@@ -5,10 +5,11 @@
     <nav class="navbar navbar-light">
       <img class="svg--border" src="../assets/img/icon-edit.svg" alt="" srcset="" @click="menushow">
     </nav>
+    <!-- 警告視窗 -->
     <div class="modal fade bd-example-modal-lg" tabindex="-1"
     role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
-          <div class="alert alert-danger text-center" role="alert">
+          <div class="alert bg-orange text-center" role="alert">
               {{ caveat }}
           </div>
       </div>
@@ -61,8 +62,9 @@
               <div class="d-flex">
                 <div class="form-check">
                 <div class="radio">
-                  <label v-if="visibility === 'all'"><input type="radio" v-model="task"
-                   :value="item.title" :disabled="timerun">{{ item.title }}</label>
+                  <label v-if="visibility === 'all'"><input type="radio" @click="clickradio(item)"
+                  v-model="task"
+                   :value="item.title" :disabled="timerun"> {{ item.title }}</label>
                    <label v-else>{{ item.title }}</label>
                 </div>
                 </div>
@@ -135,8 +137,8 @@ export default {
   data() {
     return {
       isStart: false,
-      setSecond: 1500, // 初始共幾秒,
-      minutes: '25', // 字幕顯示(分)
+      setSecond: 60, // 初始共幾秒,
+      minutes: '01', // 字幕顯示(分)
       seconds: '00', // 字幕顯示(秒)
       date: new Date(),
       interval: '',
@@ -147,6 +149,7 @@ export default {
       task: '',
       timerun: false,
       caveat: '',
+      clickindex: '',
     };
   },
   methods: {
@@ -155,17 +158,22 @@ export default {
     },
     play() {
       const vm = this;
-      if (vm.isStart) {
-        clearInterval(vm.interval);
-        vm.$refs.audio.pause();
+      if (vm.task.length === 0) {
+        vm.caveat = '請先選擇任務';
+        vm.opencaveat();
       } else {
-        vm.interval = setInterval(() => {
-          vm.counter();
-        }, 1000);
-        vm.$refs.audio.play();
-        vm.timerun = true;
+        if (vm.isStart) {
+          clearInterval(vm.interval);
+          vm.$refs.audio.pause();
+        } else {
+          vm.interval = setInterval(() => {
+            vm.counter();
+          }, 1000);
+          vm.$refs.audio.play();
+          vm.timerun = true;
+        }
+        vm.isStart = !vm.isStart;
       }
-      vm.isStart = !vm.isStart;
     },
     clear() {
       const vm = this;
@@ -175,6 +183,7 @@ export default {
       vm.minutes = '25';
       vm.seconds = '00';
       vm.isStart = false;
+      vm.task = '';
       vm.timerun = false;
     },
     counter() {
@@ -196,6 +205,7 @@ export default {
           vm.seconds = sec;
         }
       } else {
+        vm.todos[vm.clickindex].completed = true;
         vm.clear();
       }
     },
@@ -243,6 +253,11 @@ export default {
     gettodos() {
       const vm = this;
       vm.todos = JSON.parse(localStorage.getItem('todos')) || [];
+    },
+    clickradio(todo) {
+      const vm = this;
+      const newIndex = vm.todos.findIndex((item) => todo.id === item.id);
+      vm.clickindex = newIndex;
     },
   },
   computed: {
