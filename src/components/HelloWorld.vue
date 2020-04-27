@@ -5,6 +5,14 @@
     <nav class="navbar navbar-light">
       <img class="svg--border" src="../assets/img/icon-edit.svg" alt="" srcset="" @click="menushow">
     </nav>
+    <div class="modal fade bd-example-modal-lg" tabindex="-1"
+    role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+          <div class="alert alert-danger text-center" role="alert">
+              {{ caveat }}
+          </div>
+      </div>
+    </div>
     <!-- menu -->
     <div class="side-menu" :class="{menushow:sidemenushow}">
       <ul class="nav">
@@ -54,7 +62,7 @@
                 <div class="form-check">
                 <div class="radio">
                   <label v-if="visibility === 'all'"><input type="radio" v-model="task"
-                   :value="item.title">{{ item.title }}</label>
+                   :value="item.title" :disabled="timerun">{{ item.title }}</label>
                    <label v-else>{{ item.title }}</label>
                 </div>
                 </div>
@@ -137,11 +145,13 @@ export default {
       todos: [],
       visibility: 'all',
       task: '',
+      timerun: false,
+      caveat: '',
     };
   },
   methods: {
-    openModal() {
-      $('#exampleModal').modal('show');
+    opencaveat() {
+      $('.bd-example-modal-lg').modal('show');
     },
     play() {
       const vm = this;
@@ -153,6 +163,7 @@ export default {
           vm.counter();
         }, 1000);
         vm.$refs.audio.play();
+        vm.timerun = true;
       }
       vm.isStart = !vm.isStart;
     },
@@ -164,6 +175,7 @@ export default {
       vm.minutes = '25';
       vm.seconds = '00';
       vm.isStart = false;
+      vm.timerun = false;
     },
     counter() {
       const vm = this;
@@ -207,16 +219,26 @@ export default {
     },
     removeTodo(todo) {
       const vm = this;
-      const newIndex = vm.todos.findIndex((item) => todo.id === item.id);
-      vm.todos.splice(newIndex, 1);
-      localStorage.setItem('todos', JSON.stringify(vm.todos));
-      vm.gettodos();
+      if (vm.timerun) {
+        vm.caveat = '請先重置時間，才可以刪除任務。';
+        vm.opencaveat();
+      } else {
+        const newIndex = vm.todos.findIndex((item) => todo.id === item.id);
+        vm.todos.splice(newIndex, 1);
+        localStorage.setItem('todos', JSON.stringify(vm.todos));
+        vm.gettodos();
+      }
     },
     deleteList() {
       const vm = this;
-      localStorage.removeItem('todos');
-      vm.todos = [];
-      vm.gettodos();
+      if (vm.timerun) {
+        vm.caveat = '請先重置時間，才可以清空所有任務。';
+        vm.opencaveat();
+      } else {
+        localStorage.removeItem('todos');
+        vm.todos = [];
+        vm.gettodos();
+      }
     },
     gettodos() {
       const vm = this;
