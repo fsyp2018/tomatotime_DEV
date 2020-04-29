@@ -129,7 +129,7 @@
       <img v-if="isStart" src="../assets/img/tomato--orange.svg" alt="" srcset="">
       <img v-else src="../assets/img/tomato--green.svg" alt="" srcset="">
     </div>
-    <audio ref="audio" src="../assets/music/01.mp3" type="audio/mpeg" loop="loop"></audio>
+    <audio ref="audio" src="../assets/music/bell.mp3" type="audio/mpeg"></audio>
     </div>
   </div>
 </template>
@@ -166,18 +166,17 @@ export default {
     },
     play() {
       const vm = this;
+
       if (vm.task.length === 0) {
         vm.caveat = '請先選擇任務';
         vm.opencaveat();
       } else {
         if (vm.isStart) {
           clearInterval(vm.interval);
-          vm.$refs.audio.pause();
         } else {
           vm.interval = setInterval(() => {
             vm.counter();
           }, 1000);
-          vm.$refs.audio.play();
           vm.timerun = true;
         }
         vm.isStart = !vm.isStart;
@@ -185,7 +184,6 @@ export default {
     },
     clear() {
       const vm = this;
-      vm.$refs.audio.load();
       clearInterval(vm.interval);
       vm.setSecond = vm.TimeCount[0].setSecond;
       vm.minutes = vm.TimeCount[0].minutes;
@@ -215,6 +213,7 @@ export default {
       } else {
         vm.todos[vm.clickindex].completed = true;
         localStorage.setItem('todos', JSON.stringify(vm.todos));
+        vm.$refs.audio.play();
         vm.gettodos();
         vm.clear();
       }
